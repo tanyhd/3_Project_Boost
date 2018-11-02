@@ -22,6 +22,23 @@ public class Rocket : MonoBehaviour {
         Thrust();
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        switch (collision.gameObject.tag)
+        {
+            case "Friendly":
+                print("OK");    // do nothing
+                break;
+            case "Fuel":
+                print("Fuel");
+                break;
+            default:
+                print("DEAD");
+                break;
+
+        }
+    }
+
     private void Rotate()
     {
         rigidBody.freezeRotation = true;    // take manuel control of rotation
