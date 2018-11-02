@@ -6,6 +6,8 @@ using UnityEngine;
 public class Rocket : MonoBehaviour {
 
     Rigidbody rigidBody;
+    [SerializeField] int thrustSpeed = 100;
+    [SerializeField] int rotationSpeed = 10;
 
 	// Use this for initialization
 	void Start () {
@@ -21,15 +23,15 @@ public class Rocket : MonoBehaviour {
     {
         if (Input.GetKey(KeyCode.Space))    
         {
-            rigidBody.AddRelativeForce(Vector3.up); // Vector3.up is in the Y direction, .AddRelativeForce add force which is always relative to the object position
+            rigidBody.AddRelativeForce(Vector3.up * thrustSpeed * Time.deltaTime); // Vector3.up is in the Y direction, .AddRelativeForce add force which is always relative to the object position
         }
-        if (Input.GetKey(KeyCode.A) && (Input.GetKey(KeyCode.D) == false))
+        if (Input.GetKey(KeyCode.A) && (Input.GetKey(KeyCode.D) == false)) // Rotate Left
         {
-            print("Rotating Left");
+            transform.Rotate(Vector3.forward * rotationSpeed * Time.deltaTime);  // Vector3.forward is rotation in the Z direction
         }
-        if (Input.GetKey(KeyCode.D) && (Input.GetKey(KeyCode.A) == false))
+        if (Input.GetKey(KeyCode.D) && (Input.GetKey(KeyCode.A) == false))  // Rotate Right
         {
-            print("Rotating Right");
+            transform.Rotate(-Vector3.forward * rotationSpeed * Time.deltaTime);
         }
     }
 }
