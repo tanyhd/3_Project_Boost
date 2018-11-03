@@ -11,6 +11,9 @@ public class Rocket : MonoBehaviour {
     [SerializeField] float thrustSpeed = 100f;
     [SerializeField] float rotationSpeed = 10f;
 
+    enum State {Alive, Dying, Transcending };
+    State state = State.Alive;
+
 	// Use this for initialization
 	void Start () {
         rigidBody = GetComponent<Rigidbody>();
@@ -19,26 +22,44 @@ public class Rocket : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        Rotate();
-        Thrust();
+        if (state == State.Alive)
+        {
+            Rotate();
+            Thrust();
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (state != State.Alive)
+        {
+            return;
+        }
         switch (collision.gameObject.tag)
         {
             case "Friendly":
                 break;
             case "Finish":
-                print("Hit Finish");
-                SceneManager.LoadScene(1);
+                state = State.Transcending;
+                Invoke("LoadNextLevel", 1f);    // parameterise time
                 break;
             default:
-                print("DEAD");
-                SceneManager.LoadScene(0);
+                print("Hit Something");
+                state = State.Dying;
+                Invoke("LoadFirstLevel", 2f);   // parameterise time
                 break;
 
         }
+    }
+
+    private void LoadFirstLevel()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    private void LoadNextLevel()
+    {
+        SceneManager.LoadScene(1);
     }
 
     private void Rotate()
