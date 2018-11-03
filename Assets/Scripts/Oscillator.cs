@@ -19,6 +19,12 @@ public class Oscillator : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+        if (period <= Mathf.Epsilon)    // protect againt period is equal to zero
+        {
+            return;
+        }
+
         float cycles = Time.time / period;  // Number of cycles which it have gone through as the game progresses 
 
         const float tau = Mathf.PI * 2f;    // 360 deg
