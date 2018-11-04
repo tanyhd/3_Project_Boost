@@ -115,16 +115,21 @@ public class Rocket : MonoBehaviour {
 
     private void RespondToRotateInput()
     {
-        rigidBody.freezeRotation = true;    // take manuel control of rotation
-
         if (Input.GetKey(KeyCode.A) && (Input.GetKey(KeyCode.D) == false)) // Rotate Left
         {
-            transform.Rotate(Vector3.forward * rotationSpeed * Time.deltaTime);  // Vector3.forward is rotation in the Z direction
+            RotateManually(rotationSpeed * Time.deltaTime);
         }
         if (Input.GetKey(KeyCode.D) && (Input.GetKey(KeyCode.A) == false))  // Rotate Right
         {
-            transform.Rotate(-Vector3.forward * rotationSpeed * Time.deltaTime);
+            RotateManually(-rotationSpeed * Time.deltaTime);
         }
+
+    }
+
+    private void RotateManually(float rotationThisFrame)
+    {
+        rigidBody.freezeRotation = true;    // take manuel control of rotation
+        transform.Rotate(Vector3.forward * rotationThisFrame);  // Vector3.forward is rotation in the Z direction
         rigidBody.freezeRotation = false;    // resume physics control of rotation
     }
 
@@ -136,9 +141,14 @@ public class Rocket : MonoBehaviour {
         }
         else
         {
-            audioSource.Stop();
-            mainEngineParticles.Stop();
+            StopApplyingThrust();
         }
+    }
+
+    private void StopApplyingThrust()
+    {
+        audioSource.Stop();
+        mainEngineParticles.Stop();
     }
 
     private void ApplyThrust()
