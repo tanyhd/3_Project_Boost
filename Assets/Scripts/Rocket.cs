@@ -19,6 +19,7 @@ public class Rocket : MonoBehaviour {
     [SerializeField] ParticleSystem deathParticles;
     [SerializeField] ParticleSystem successParticles;
 
+    [SerializeField] bool collisionDisabled = false;
     enum State {Alive, Dying, Transcending };
     State state = State.Alive;
 
@@ -37,11 +38,27 @@ public class Rocket : MonoBehaviour {
             RespondToRotateInput();
             RespondToThrustInput();
         }
+        if (Debug.isDebugBuild) // Check the system to see if it is in development build to see if it should respond to development keys
+        {
+            RespondToDebugKeys();
+        }
+    }
+
+    private void RespondToDebugKeys()
+    {
+        if (Input.GetKeyDown(KeyCode.L))    // Use GetKeyDown to just return one time when key is press
+        {
+            LoadNextLevel();
+        }
+        else if (Input.GetKeyDown(KeyCode.C))
+        {
+            collisionDisabled = !collisionDisabled; // toggle on/off state
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (state != State.Alive)
+        if (state != State.Alive || collisionDisabled)
         {
             return;
         }
